@@ -11,11 +11,14 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.Grid;
 
 public class GameWindow extends Application {
 
     private GraphicsContext context;
+    private Grid grid;
 
+    private Scene scene;
     private Canvas gameCanvas;
     private Label  stateLabel;
 
@@ -34,12 +37,20 @@ public class GameWindow extends Application {
 
         pane.getChildren().addAll(gameCanvas, stateLabel);
         context = gameCanvas.getGraphicsContext2D();
-        Scene scene = new Scene(pane);
+        scene = new Scene(pane);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
     public GraphicsContext getContext() {
         return context;
+    }
+
+    public double getWidth() {
+        return scene.getWidth();
+    }
+
+    public double getHeight() {
+        return scene.getHeight();
     }
 }
