@@ -33,4 +33,8 @@ public class Blinker implements Runnable {
             }
         }
     }
+
+    public void stop() {
+        continueThread = false;
+    }
 }

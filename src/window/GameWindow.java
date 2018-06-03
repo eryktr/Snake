@@ -1,7 +1,9 @@
 package window;
 
 import graphics.Blinker;
+import graphics.Food;
 import graphics.GridPainter;
+import graphics.Snake;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -11,16 +13,20 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.GameMode;
 import model.Grid;
 
 public class GameWindow extends Application {
 
     private GraphicsContext context;
-    private Grid grid;
+    private GridPainter painter;
+    private GameMode gameMode = GameMode.MENU;
 
     private Scene scene;
     private Canvas gameCanvas;
     private Label  stateLabel;
+
+    private Grid grid;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -37,20 +43,31 @@ public class GameWindow extends Application {
 
         pane.getChildren().addAll(gameCanvas, stateLabel);
         context = gameCanvas.getGraphicsContext2D();
+        painter = new GridPainter(context);
         scene = new Scene(pane);
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        scene.setOnKeyPressed( event ->  {
+            switch(event.getCode()) {
+                case SPACE:
+                    if(getGameMode() == GameMode.MENU) {
+                        startGame();
+                    }
+                    break;
+            }
+        });
     }
 
-    public GraphicsContext getContext() {
-        return context;
-    }
+    public void startGame() {
+        grid = new Grid(this);
+        painter.drawRectangle(grid.getSnake().getHead(), grid.getSnake().aliveColor);
+        painter.drawRectangle(grid.getFood().getPoint(), Food.color);
+        gameMode = GameMode.RUNNING;
 
-    public double getWidth() {
-        return scene.getWidth();
     }
-
-    public double getHeight() {
-        return scene.getHeight();
-    }
+    public GraphicsContext getContext() { return context; }
+    public double getWidth()            { return scene.getWidth(); }
+    public double getHeight()           { return scene.getHeight(); }
+    public GameMode getGameMode()       { return gameMode; }
 }

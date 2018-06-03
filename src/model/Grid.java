@@ -7,7 +7,7 @@ import window.GameWindow;
 import java.util.Random;
 
 public class Grid {
-    private final int side = 10;
+    private static final int side = 10;
     private final int rows;
     private final int columns;
     private final GridController gridController;
@@ -20,6 +20,10 @@ public class Grid {
         columns = (int)gameWindow.getWidth() / side;
         random = new Random();
         gridController = new GridController(rows, columns);
+        snake = new Snake(this, new Point(side * rows/2, side * columns/2));
+        food = new Food(getFoodPoint());
+
+
     }
 
     public Snake getSnake() {
@@ -30,8 +34,21 @@ public class Grid {
         return food;
     }
 
-    public int getSide() {
+    public Point getFoodPoint() {
+        Point randomPoint = gridController.getRandomPoint();
+        while(snake.getPoints().contains(randomPoint)) {
+            randomPoint = gridController.getRandomPoint();
+        }
+
+        return randomPoint;
+    }
+
+    public static int getSide() {
         return side;
+    }
+
+    public void setSnake(Snake snake) {
+        this.snake = snake;
     }
 }
 

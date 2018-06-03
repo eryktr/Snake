@@ -1,4 +1,15 @@
 package model.MovingBehavior;
 
-public class MovingRight {
+import graphics.Snake;
+import model.Point;
+
+import java.util.ArrayList;
+
+public class MovingRight implements MovingBehavior {
+    @Override
+    public void move(Snake snake) {
+        ArrayList<Point> points = snake.getPoints();
+        points.add(snake.getHead().translate(1, 0));
+        snake.getPoints().remove(0);
+    }
 }

@@ -2,6 +2,8 @@ package graphics;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import model.Grid;
+import model.Point;
 
 public class GridPainter {
     private GraphicsContext gc;
@@ -14,5 +16,11 @@ public class GridPainter {
         gc.setFill(color);
         gc.fillRect(x,y, width, height);
     }
+
+    public void drawRectangle(Point point, Color color) {
+        gc.setFill(color);
+        gc.fillRect(point.getX(), point.getY(), Grid.getSide(), Grid.getSide());
+    }
+
 
 }
