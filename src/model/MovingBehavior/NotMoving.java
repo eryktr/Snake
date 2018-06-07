@@ -5,8 +5,8 @@ import model.Point;
 
 public class NotMoving implements MovingBehavior {
     @Override
-    public void move(Snake snake) {
+    public Point move(Snake snake) {
         Point head = snake.getHead();
-
+        return head;
     }
 }

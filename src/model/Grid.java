@@ -1,9 +1,11 @@
 package model;
 
 import graphics.Food;
+import graphics.GridPainter;
 import graphics.Snake;
 import window.GameWindow;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Grid {
@@ -14,16 +16,18 @@ public class Grid {
     private Random random;
     private Snake snake;
     private Food food;
+    private GridPainter painter;
+    private GameWindow window;
 
     public Grid(GameWindow gameWindow) {
+        window = gameWindow;
         rows = (int)gameWindow.getHeight() / side;
         columns = (int)gameWindow.getWidth() / side;
         random = new Random();
         gridController = new GridController(rows, columns);
-        snake = new Snake(this, new Point(side * rows/2, side * columns/2));
+        snake = new Snake(this, new Point(rows/2,  columns/2));
         food = new Food(getFoodPoint());
-
-
+        painter = gameWindow.getPainter();
     }
 
     public Snake getSnake() {
@@ -36,7 +40,7 @@ public class Grid {
 
     public Point getFoodPoint() {
         Point randomPoint = gridController.getRandomPoint();
-        while(snake.getPoints().contains(randomPoint)) {
+        while(contains(snake.getPoints(), randomPoint)) {
             randomPoint = gridController.getRandomPoint();
         }
 
@@ -46,10 +50,27 @@ public class Grid {
     public static int getSide() {
         return side;
     }
-
+    public GridController getGridController() {return gridController;}
     public void setSnake(Snake snake) {
         this.snake = snake;
     }
+    public GridPainter getPainter() {return painter;}
+    public void setNewFood() {
+        food = new Food(getFoodPoint());
+        painter.drawRectangle(food.getPoint(), Food.color);
+    }
+
+    public static boolean contains(ArrayList<Point> list, Point point) {
+        for(Point p : list) {
+            if(p.equals(point)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public GameWindow getWindow() {return window;}
 }
 
 

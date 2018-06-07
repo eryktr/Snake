@@ -1,7 +1,8 @@
 package model.MovingBehavior;
 
 import graphics.Snake;
+import model.Point;
 
 public interface MovingBehavior {
-    void move(Snake snake);
+    Point move(Snake snake);
 }

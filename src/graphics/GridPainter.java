@@ -19,7 +19,7 @@ public class GridPainter {
 
     public void drawRectangle(Point point, Color color) {
         gc.setFill(color);
-        gc.fillRect(point.getX(), point.getY(), Grid.getSide(), Grid.getSide());
+        gc.fillRect(point.getX() * Grid.getSide(), point.getY() * Grid.getSide(), Grid.getSide(), Grid.getSide());
     }
 
 

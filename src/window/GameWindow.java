@@ -13,20 +13,29 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import model.GameLoop;
 import model.GameMode;
 import model.Grid;
+import model.MovingBehavior.MovingDown;
+import model.MovingBehavior.MovingLeft;
+import model.MovingBehavior.MovingRight;
+import model.MovingBehavior.MovingUp;
+
+import static model.GameMode.MENU;
+import static model.GameMode.RUNNING;
 
 public class GameWindow extends Application {
 
     private GraphicsContext context;
     private GridPainter painter;
-    private GameMode gameMode = GameMode.MENU;
+    private GameMode gameMode = MENU;
 
     private Scene scene;
     private Canvas gameCanvas;
     private Label  stateLabel;
 
     private Grid grid;
+    private GameLoop loop;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -49,12 +58,32 @@ public class GameWindow extends Application {
         primaryStage.show();
 
         scene.setOnKeyPressed( event ->  {
-            switch(event.getCode()) {
-                case SPACE:
-                    if(getGameMode() == GameMode.MENU) {
+            if(gameMode == MENU) {
+                switch (event.getCode()) {
+                    case SPACE:
+                        blinker.stop();
                         startGame();
-                    }
-                    break;
+                        break;
+                }
+            }
+            else if(gameMode == RUNNING) {
+                switch (event.getCode()) {
+                    case UP:
+                        grid.getSnake().setMovingBehavior(new MovingUp());
+                        break;
+
+                    case DOWN:
+                        grid.getSnake().setMovingBehavior(new MovingDown());
+                        break;
+
+                    case LEFT:
+                        grid.getSnake().setMovingBehavior(new MovingLeft());
+                        break;
+
+                    case RIGHT:
+                        grid.getSnake().setMovingBehavior(new MovingRight());
+                        break;
+                }
             }
         });
     }
@@ -64,10 +93,14 @@ public class GameWindow extends Application {
         painter.drawRectangle(grid.getSnake().getHead(), grid.getSnake().aliveColor);
         painter.drawRectangle(grid.getFood().getPoint(), Food.color);
         gameMode = GameMode.RUNNING;
+        loop = new GameLoop(grid);
+        (new Thread(loop)).start();
 
     }
-    public GraphicsContext getContext() { return context; }
-    public double getWidth()            { return scene.getWidth(); }
-    public double getHeight()           { return scene.getHeight(); }
-    public GameMode getGameMode()       { return gameMode; }
+    public GraphicsContext getContext()  { return context; }
+    public double getWidth()             { return scene.getWidth(); }
+    public double getHeight()            { return scene.getHeight(); }
+    public GameMode getGameMode()        { return gameMode; }
+    public GridPainter getPainter()      { return painter; }
+    public GameLoop getGameLoop() { return loop;}
 }

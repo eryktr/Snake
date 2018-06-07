@@ -14,7 +14,7 @@ public class GridController {
     }
 
     public Point getRandomPoint() {
-        return new Point(random.nextInt(Grid.getSide() *rows), random.nextInt(Grid.getSide() * columns));
+        return new Point(random.nextInt(rows-1), random.nextInt(columns-1));
     }
 
     public Point wrapPoint(Point point) {

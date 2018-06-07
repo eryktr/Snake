@@ -17,7 +17,7 @@ public class Point {
     }
 
     public Point translate(int deltaX, int deltaY) {
-        return new Point(this.getX() + deltaX, this.getX()+deltaX);
+        return new Point(this.getX() + deltaX, this.getY()+deltaY);
     }
 
     public boolean equals(Point p) {

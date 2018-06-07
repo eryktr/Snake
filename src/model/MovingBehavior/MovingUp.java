@@ -7,9 +7,7 @@ import java.util.ArrayList;
 
 public class MovingUp implements MovingBehavior {
     @Override
-    public void move(Snake snake) {
-        ArrayList<Point> points = snake.getPoints();
-        points.add(snake.getHead().translate(0, 1));
-        snake.getPoints().remove(0);
+    public Point move(Snake snake) {
+        return snake.getHead().translate(0, - 1);
     }
 }
