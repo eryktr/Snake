@@ -22,5 +22,9 @@ public class GridPainter {
         gc.fillRect(point.getX() * Grid.getSide(), point.getY() * Grid.getSide(), Grid.getSide(), Grid.getSide());
     }
 
+    public GraphicsContext getGraphicsContext() {
+        return gc;
+    }
+
 
 }

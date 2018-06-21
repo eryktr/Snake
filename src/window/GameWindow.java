@@ -11,6 +11,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import model.GameLoop;
@@ -21,6 +22,7 @@ import model.MovingBehavior.MovingLeft;
 import model.MovingBehavior.MovingRight;
 import model.MovingBehavior.MovingUp;
 
+import static model.GameMode.DEAD;
 import static model.GameMode.MENU;
 import static model.GameMode.RUNNING;
 
@@ -32,10 +34,12 @@ public class GameWindow extends Application {
 
     private Scene scene;
     private Canvas gameCanvas;
-    private Label  stateLabel;
+    private Label  stateLabel, scoreLabel;
 
     private Grid grid;
     private GameLoop loop;
+
+    private Blinker blinker;
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -44,13 +48,18 @@ public class GameWindow extends Application {
         stateLabel = new Label("Press SPACE to start the game");
         stateLabel.setStyle("-fx-font-size: 20");
         stateLabel.setTextFill(Color.RED);
-        Blinker blinker = new Blinker(stateLabel);
+        scoreLabel = new Label("Score: ");
+        scoreLabel.setStyle("-fx-font-size: 20");
+        scoreLabel.setTextFill(Color.RED);
+        VBox labelVBox = new VBox();
+        labelVBox.getChildren().addAll(stateLabel, scoreLabel);
+        blinker = new Blinker(stateLabel);
         (new Thread(blinker)).start();
 
         Canvas gameCanvas = new Canvas(600, 600);
         pane.setStyle("-fx-background-color: black");
 
-        pane.getChildren().addAll(gameCanvas, stateLabel);
+        pane.getChildren().addAll(gameCanvas, labelVBox);
         context = gameCanvas.getGraphicsContext2D();
         painter = new GridPainter(context);
         scene = new Scene(pane);
@@ -85,10 +94,22 @@ public class GameWindow extends Application {
                         break;
                 }
             }
+            else if(gameMode == DEAD) {
+                switch (event.getCode()) {
+                    case SPACE:
+                        startGame();
+                        blinker.stop();
+                        break;
+                }
+            }
         });
     }
 
     public void startGame() {
+        if(painter != null && grid != null) {
+            painter.getGraphicsContext().clearRect(0, 0, 600, 600);
+            scoreLabel.setText("Score: ");
+        }
         grid = new Grid(this);
         painter.drawRectangle(grid.getSnake().getHead(), grid.getSnake().aliveColor);
         painter.drawRectangle(grid.getFood().getPoint(), Food.color);
@@ -102,5 +123,10 @@ public class GameWindow extends Application {
     public double getHeight()            { return scene.getHeight(); }
     public GameMode getGameMode()        { return gameMode; }
     public GridPainter getPainter()      { return painter; }
-    public GameLoop getGameLoop() { return loop;}
+    public GameLoop getGameLoop()        { return loop;}
+    public Label getStateLabel()         { return stateLabel; }
+    public void  setGameOver()           { gameMode = DEAD;}
+    public Blinker getBlinker()          { return blinker;}
+    public Label getScoreLabel()           { return scoreLabel;}
+
 }

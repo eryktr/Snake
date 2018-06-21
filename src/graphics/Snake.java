@@ -34,8 +34,11 @@ public class Snake {
         if (isAlive(newPoint)) {
             if(newPoint.equals(grid.getFood().getPoint())) {
                 expand(newPoint);
+                grid.increaseScore();
+                Platform.runLater(() ->grid.getWindow().getScoreLabel().setText("Score: "+grid.getScore()));
             }
             shift(newPoint);
+
         }
         else {
             for(Point p: getPoints()) {
@@ -43,6 +46,8 @@ public class Snake {
             }
             grid.getWindow().getGameLoop().changeGameState();
             grid.getWindow().getGameLoop().notify();
+            grid.getWindow().setGameOver();
+
         }
     }
 

@@ -12,6 +12,7 @@ public class Grid {
     private static final int side = 10;
     private final int rows;
     private final int columns;
+    private int score;
     private final GridController gridController;
     private Random random;
     private Snake snake;
@@ -70,6 +71,13 @@ public class Grid {
         return false;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public void increaseScore() {
+        score = score + 100;
+    }
     public GameWindow getWindow() {return window;}
 }
 
